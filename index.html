@@ -6,571 +6,937 @@
   <title>Lukas M. Simon</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
   <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
     :root {
-      --paper:   #fdfaf5;
-      --ink:     #1c1b17;
-      --ink-mid: #4a4840;
-      --ink-dim: #9a9690;
-      --green:   #2c4a2e;
-      --green-l: #4a7a4e;
-      --rule:    rgba(28,27,23,0.1);
-      --serif-display: 'Cormorant Garamond', Georgia, serif;
-      --serif-body:    'Newsreader', Georgia, serif;
-      --mono:          'IBM Plex Mono', monospace;
+      --night:    #0d0f14;
+      --deep:     #131720;
+      --surface:  #1a1f2e;
+      --lift:     #222840;
+      --text:     #e8e4d8;
+      --muted:    #7a7870;
+      --subtle:   #2e3448;
+      --gold:     #c9a84c;
+      --gold-dim: rgba(201,168,76,0.12);
+      --gold-glow:rgba(201,168,76,0.25);
+      --sky:      #6fa3c4;
+      --rule:     rgba(232,228,216,0.08);
+      --f-display:'DM Serif Display', Georgia, serif;
+      --f-body:   'Source Serif 4', Georgia, serif;
+      --f-mono:   'DM Mono', monospace;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--serif-body);
-      font-size: 18px;
+      background: var(--night);
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 17px;
       line-height: 1.75;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 2.5rem;
+    /* ── GRAIN OVERLAY ──────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
     }
 
-    /* NAV */
+    /* ── NAV ────────────────────────────────────────────────── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 50;
-      background: rgba(253,250,245,0.92);
-      backdrop-filter: blur(8px);
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13,15,20,0.75);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--rule);
     }
     .nav-inner {
-      max-width: 780px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 1.1rem 2.5rem;
+      padding: 1.1rem 3rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .nav-name {
-      font-family: var(--serif-display);
-      font-size: 1.1rem;
-      font-weight: 500;
+    .nav-mark {
+      font-family: var(--f-display);
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
       letter-spacing: 0.01em;
-      color: var(--ink);
-      text-decoration: none;
     }
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-    }
+    .nav-links { list-style: none; display: flex; gap: 2.2rem; }
     .nav-links a {
-      font-family: var(--mono);
-      font-size: 0.7rem;
+      font-family: var(--f-mono);
+      font-size: 0.68rem;
       font-weight: 300;
-      letter-spacing: 0.08em;
-      color: var(--ink-mid);
+      letter-spacing: 0.1em;
+      color: var(--muted);
       text-decoration: none;
-      text-transform: lowercase;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--green); }
+    .nav-links a:hover { color: var(--gold); }
 
-    /* HERO */
-    #top {
-      padding: 10rem 0 6rem;
-      border-bottom: 1px solid var(--rule);
+    /* ── HERO ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 0 5rem;
     }
-    .hero-eyebrow {
-      font-family: var(--mono);
-      font-size: 0.7rem;
+
+    /* Animated background canvas */
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      opacity: 0.55;
+    }
+
+    /* Radial vignette */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 70% 50%, transparent 40%, var(--night) 100%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      width: 100%;
+    }
+
+    .hero-kicker {
+      font-family: var(--f-mono);
+      font-size: 0.68rem;
       font-weight: 300;
-      letter-spacing: 0.15em;
-      color: var(--green-l);
+      letter-spacing: 0.22em;
+      color: var(--gold);
       text-transform: lowercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.6rem;
       opacity: 0;
-      animation: appear 1s 0.1s forwards;
+      animation: riseIn 1s 0.1s cubic-bezier(.22,.68,0,1.2) forwards;
+      display: flex; align-items: center; gap: 0.8rem;
     }
+    .hero-kicker::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
     h1.hero-name {
-      font-family: var(--serif-display);
-      font-size: clamp(3.5rem, 8vw, 6.5rem);
-      font-weight: 300;
-      line-height: 1;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-      margin-bottom: 2rem;
+      font-family: var(--f-display);
+      font-size: clamp(4rem, 9vw, 8rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
       opacity: 0;
-      animation: appear 1s 0.3s forwards;
+      animation: riseIn 1s 0.25s cubic-bezier(.22,.68,0,1.2) forwards;
+    }
+    h1.hero-name span {
+      display: block;
+      color: rgba(232,228,216,0.35);
     }
     h1.hero-name em {
       font-style: italic;
-      font-weight: 300;
-      color: var(--green);
-    }
-    .hero-statement {
-      font-size: 1.2rem;
-      font-weight: 300;
-      color: var(--ink-mid);
-      max-width: 560px;
-      line-height: 1.8;
-      border-left: 2px solid var(--green);
-      padding-left: 1.5rem;
-      margin-bottom: 3rem;
-      opacity: 0;
-      animation: appear 1s 0.5s forwards;
-    }
-    .hero-links {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: appear 1s 0.7s forwards;
-    }
-    .hero-link {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 300;
-      letter-spacing: 0.1em;
-      color: var(--ink-mid);
-      text-decoration: none;
-      border-bottom: 1px solid var(--rule);
-      padding-bottom: 2px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .hero-link:hover {
-      color: var(--green);
-      border-color: var(--green);
+      color: var(--gold);
     }
 
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(10px); }
+    .hero-tagline {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: rgba(232,228,216,0.6);
+      max-width: 440px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      padding-left: 1.5rem;
+      border-left: 2px solid rgba(201,168,76,0.4);
+      opacity: 0;
+      animation: riseIn 1s 0.45s cubic-bezier(.22,.68,0,1.2) forwards;
+    }
+
+    .hero-ctas {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: riseIn 1s 0.65s cubic-bezier(.22,.68,0,1.2) forwards;
+    }
+
+    .btn {
+      font-family: var(--f-mono);
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      padding: 0.75rem 1.6rem;
+      border: 1px solid;
+      transition: all 0.25s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-gold {
+      color: var(--night);
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+    .btn-gold:hover {
+      background: #d4b460;
+      box-shadow: 0 0 28px var(--gold-glow);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      color: var(--muted);
+      background: transparent;
+      border-color: var(--rule);
+    }
+    .btn-outline:hover {
+      color: var(--text);
+      border-color: rgba(232,228,216,0.3);
+      background: rgba(232,228,216,0.04);
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* SECTIONS */
-    section {
-      padding: 5rem 0;
-      border-bottom: 1px solid var(--rule);
-    }
-    section:last-of-type { border-bottom: none; }
-
-    .section-marker {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 300;
-      letter-spacing: 0.2em;
-      color: var(--ink-dim);
-      text-transform: lowercase;
-      margin-bottom: 3rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .section-marker::after {
-      content: '';
-      flex: 1;
+    /* ── DIVIDER ────────────────────────────────────────────── */
+    .divider {
       height: 1px;
-      background: var(--rule);
+      background: linear-gradient(90deg, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
     }
 
-    /* ABOUT */
-    .about-text p {
-      font-size: 1.1rem;
+    /* ── SECTIONS ───────────────────────────────────────────── */
+    .section-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+    section { padding: 7rem 0; position: relative; }
+
+    .eyebrow {
+      font-family: var(--f-mono);
+      font-size: 0.63rem;
       font-weight: 300;
-      color: var(--ink-mid);
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: lowercase;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .section-heading {
+      font-family: var(--f-display);
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+    }
+    .section-heading em { font-style: italic; color: rgba(232,228,216,0.45); }
+
+    /* ── ABOUT ──────────────────────────────────────────────── */
+    #about { background: var(--deep); }
+    #about::before {
+      content: 'ABOUT';
+      position: absolute;
+      top: 3rem; right: 3rem;
+      font-family: var(--f-display);
+      font-size: 12rem;
+      font-weight: 400;
+      color: var(--surface);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.04em;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 5rem;
+      align-items: start;
+      position: relative; z-index: 1;
+    }
+    .about-text p {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(232,228,216,0.7);
       margin-bottom: 1.2rem;
-      max-width: 680px;
+      line-height: 1.85;
     }
     .about-text p:last-child { margin-bottom: 0; }
     .about-text a {
-      color: var(--green);
+      color: var(--gold);
       text-decoration: none;
-      border-bottom: 1px solid rgba(44,74,46,0.3);
+      border-bottom: 1px solid rgba(201,168,76,0.3);
       transition: border-color 0.2s;
     }
-    .about-text a:hover { border-color: var(--green); }
+    .about-text a:hover { border-color: var(--gold); }
 
-    /* RESEARCH */
-    .work-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem 3rem;
-    }
-    .work-item {}
-    .work-num {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      font-weight: 300;
-      color: var(--ink-dim);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
-    }
-    .work-title {
-      font-family: var(--serif-display);
-      font-size: 1.35rem;
-      font-weight: 500;
-      line-height: 1.3;
-      margin-bottom: 0.5rem;
-    }
-    .work-desc {
-      font-size: 0.95rem;
-      font-weight: 300;
-      color: var(--ink-mid);
-      line-height: 1.7;
-    }
-
-    /* PUBLICATIONS */
-    .pub-list {
-      list-style: none;
+    .about-facts {
       display: flex;
       flex-direction: column;
+      gap: 0;
     }
-    .pub-item {
-      display: grid;
-      grid-template-columns: 72px 1fr;
-      gap: 0 1.5rem;
+    .fact-item {
       padding: 1.5rem 0;
       border-bottom: 1px solid var(--rule);
-    }
-    .pub-item:first-child { border-top: 1px solid var(--rule); }
-    .pub-journal {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      color: var(--green-l);
-      padding-top: 0.25rem;
-      line-height: 1.5;
-    }
-    .pub-title {
-      font-family: var(--serif-display);
-      font-size: 1.1rem;
-      font-weight: 500;
-      line-height: 1.4;
-      margin-bottom: 0.3rem;
-    }
-    .pub-meta {
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: var(--ink-dim);
-      font-style: italic;
-    }
-    .pub-meta strong {
-      font-style: normal;
-      font-weight: 400;
-      color: var(--ink-mid);
-    }
-    .pub-year {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      color: var(--ink-dim);
-      margin-top: 0.3rem;
-    }
-    .pub-note {
-      margin-top: 2rem;
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      font-weight: 300;
-      color: var(--ink-dim);
-      letter-spacing: 0.04em;
-      line-height: 1.8;
-    }
-    .pub-note a {
-      color: var(--green);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(44,74,46,0.3);
-    }
-    .pub-note a:hover { border-color: var(--green); }
-
-    /* CONTACT */
-    #contact { border-bottom: none; }
-    .contact-intro {
-      font-family: var(--serif-display);
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.3;
-      color: var(--ink);
-      max-width: 540px;
-      margin-bottom: 2.5rem;
-    }
-    .contact-grid {
       display: flex;
-      gap: 3rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 0.2rem;
     }
-    .contact-label {
-      font-family: var(--mono);
+    .fact-item:first-child { border-top: 1px solid var(--rule); }
+    .fact-label {
+      font-family: var(--f-mono);
       font-size: 0.62rem;
       font-weight: 300;
       letter-spacing: 0.15em;
-      color: var(--ink-dim);
+      color: var(--muted);
       text-transform: lowercase;
-      margin-bottom: 0.35rem;
     }
-    .contact-val {
-      font-size: 0.95rem;
+    .fact-value {
+      font-size: 1rem;
       font-weight: 300;
-    }
-    .contact-val a {
-      color: var(--ink);
-      text-decoration: none;
-      border-bottom: 1px solid var(--rule);
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .contact-val a:hover {
-      color: var(--green);
-      border-color: var(--green);
+      color: var(--text);
     }
 
-    /* FOOTER */
+    /* ── RESEARCH ───────────────────────────────────────────── */
+    #research { background: var(--night); }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin-top: 3.5rem;
+    }
+    .r-card {
+      background: var(--night);
+      padding: 2.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .r-card:hover { background: var(--surface); }
+    .r-card:hover .r-num { opacity: 1; color: var(--gold); }
+    .r-card:hover .r-bar { width: 100%; }
+
+    /* animated bottom bar */
+    .r-bar {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      transition: width 0.5s ease;
+    }
+
+    .r-num {
+      font-family: var(--f-display);
+      font-style: italic;
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--surface);
+      margin-bottom: 1.2rem;
+      transition: color 0.3s, opacity 0.3s;
+      opacity: 0.6;
+    }
+    .r-title {
+      font-family: var(--f-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+    .r-desc {
+      font-size: 0.93rem;
+      font-weight: 300;
+      color: rgba(232,228,216,0.55);
+      line-height: 1.75;
+    }
+
+    /* ── PUBLICATIONS ───────────────────────────────────────── */
+    #publications { background: var(--deep); }
+    .pub-heading-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .pub-see-all {
+      font-family: var(--f-mono);
+      font-size: 0.68rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 0.4rem;
+      border-bottom: 1px solid rgba(201,168,76,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+    .pub-see-all:hover { border-color: var(--gold); }
+    .pub-see-all .arrow { transition: transform 0.2s; }
+    .pub-see-all:hover .arrow { transform: translateX(3px); }
+
+    .pub-list { list-style: none; }
+    .pub-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 100px;
+      align-items: start;
+      gap: 0 2rem;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--rule);
+      transition: background 0.2s;
+      margin: 0 -1.5rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      border-radius: 4px;
+    }
+    .pub-row:first-child { border-top: 1px solid var(--rule); }
+    .pub-row:hover { background: rgba(232,228,216,0.025); }
+
+    .pub-venue {
+      font-family: var(--f-mono);
+      font-size: 0.58rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--sky);
+      line-height: 1.5;
+      padding-top: 0.3rem;
+    }
+    .pub-title {
+      font-family: var(--f-display);
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+    .pub-authors {
+      font-size: 0.84rem;
+      font-weight: 300;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .pub-authors strong {
+      font-style: normal;
+      font-weight: 400;
+      color: rgba(232,228,216,0.7);
+    }
+    .pub-year {
+      font-family: var(--f-mono);
+      font-size: 0.62rem;
+      font-weight: 300;
+      color: var(--muted);
+      text-align: right;
+      padding-top: 0.3rem;
+    }
+
+    .pub-footnote {
+      margin-top: 1.8rem;
+      font-family: var(--f-mono);
+      font-size: 0.63rem;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+    }
+
+    /* ── CONTACT ────────────────────────────────────────────── */
+    #contact {
+      background: var(--night);
+      overflow: hidden;
+      position: relative;
+    }
+    #contact::before {
+      content: '';
+      position: absolute;
+      bottom: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .contact-inner {
+      position: relative; z-index: 1;
+      max-width: 680px;
+    }
+    .contact-headline {
+      font-family: var(--f-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      margin-top: 1rem;
+    }
+    .contact-headline em {
+      font-style: italic;
+      color: rgba(232,228,216,0.3);
+    }
+    .contact-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(232,228,216,0.5);
+      max-width: 420px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    .contact-tiles {
+      display: flex;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      max-width: 560px;
+    }
+    .c-tile {
+      flex: 1;
+      background: var(--night);
+      padding: 1.5rem 1.8rem;
+      text-decoration: none;
+      transition: background 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .c-tile:hover { background: var(--surface); }
+    .c-tile:hover .c-tile-arrow { transform: translate(2px,-2px); }
+    .c-label {
+      font-family: var(--f-mono);
+      font-size: 0.6rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: lowercase;
+    }
+    .c-val {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .c-tile-arrow {
+      font-size: 0.8rem;
+      color: var(--gold);
+      margin-top: 0.3rem;
+      transition: transform 0.2s;
+      align-self: flex-end;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
     footer {
-      padding: 2rem 0;
+      background: var(--deep);
       border-top: 1px solid var(--rule);
+      padding: 1.8rem 3rem;
+      max-width: 100%;
     }
     .footer-inner {
-      max-width: 780px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 0 2.5rem;
       display: flex;
       justify-content: space-between;
-      font-family: var(--mono);
-      font-size: 0.65rem;
+      align-items: center;
+      font-family: var(--f-mono);
+      font-size: 0.63rem;
       font-weight: 300;
-      color: var(--ink-dim);
-      letter-spacing: 0.06em;
+      color: var(--muted);
+      letter-spacing: 0.07em;
     }
 
-    /* SCROLL REVEAL */
-    .fade-in {
+    /* ── SCROLL REVEAL ──────────────────────────────────────── */
+    .reveal {
       opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+      transform: translateY(22px);
+      transition: opacity 0.85s cubic-bezier(.22,.68,0,1), transform 0.85s cubic-bezier(.22,.68,0,1);
     }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .reveal.up { opacity: 1; transform: translateY(0); }
 
-    /* RESPONSIVE */
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .work-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .pub-item { grid-template-columns: 1fr; gap: 0.3rem; }
-      .contact-grid { gap: 1.5rem; }
-      .footer-inner { flex-direction: column; gap: 0.4rem; }
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .nav-inner, .section-wrap { padding: 1rem 1.8rem; }
+      #hero { padding: 8rem 0 4rem; }
+      .hero-content { padding: 0 1.8rem; }
+      section { padding: 5rem 0; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .research-grid { grid-template-columns: 1fr; }
+      .pub-row { grid-template-columns: 60px 1fr; }
+      .pub-year { display: none; }
+      .contact-tiles { flex-direction: column; max-width: 100%; }
+      #about::before { font-size: 6rem; top: 1rem; right: 1rem; }
+      footer { padding: 1.5rem 1.8rem; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-inner">
-      <a href="#top" class="nav-name">Lukas M. Simon</a>
-      <ul class="nav-links">
-        <li><a href="#about">about</a></li>
-        <li><a href="#work">research</a></li>
-        <li><a href="#publications">papers</a></li>
-        <li><a href="#contact">contact</a></li>
-      </ul>
-    </div>
-  </nav>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#hero" class="nav-mark">Lukas M. Simon</a>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#research">research</a></li>
+      <li><a href="#publications">papers</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <div id="top">
-    <div class="container">
-      <div class="hero-eyebrow">computational biologist &nbsp;·&nbsp; houston, tx</div>
-      <h1 class="hero-name">Lukas M.<br><em>Simon</em></h1>
-      <p class="hero-statement">
-        I build machine learning methods and genomic analyses to understand cancer—and find ways to treat it.
-      </p>
-      <div class="hero-links">
-        <a href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank" class="hero-link">google scholar</a>
-        <a href="https://github.com/lkmklsmn" target="_blank" class="hero-link">github</a>
-        <a href="mailto:lkmklsmn@gmail.com" class="hero-link">email</a>
-        <a href="https://www.ncbi.nlm.nih.gov/myncbi/1fCTiG6Pkw9Aq/bibliography/public/" target="_blank" class="hero-link">pubmed</a>
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-kicker">computational biologist &nbsp;·&nbsp; baylor college of medicine</div>
+    <h1 class="hero-name">
+      <span>Lukas M.</span>
+      <em>Simon</em>
+    </h1>
+    <p class="hero-tagline">
+      I build machine learning methods and genomic analyses to understand cancer—and find ways to treat it.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold" href="#research">Explore Research</a>
+      <a class="btn btn-outline" href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank">Google Scholar ↗</a>
+      <a class="btn btn-outline" href="https://github.com/lkmklsmn" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="eyebrow">about</div>
+        <h2 class="section-heading">Decoding cancer <em>with data</em></h2>
+        <br>
+        <div class="about-text">
+          <p>
+            I'm an Assistant Professor and Group Leader of Computational Biology at the
+            <a href="https://www.bcm.edu" target="_blank">Therapeutic Innovation Center, Baylor College of Medicine</a>.
+            My work sits at the intersection of machine learning and cancer medicine—using AI and
+            genomics to identify drug targets, understand disease mechanisms, and accelerate the
+            path from discovery to therapy.
+          </p>
+          <p>
+            Before Baylor, I trained as a postdoctoral fellow with Fabian Theis at the Helmholtz
+            Research Center in Munich, where I helped develop some of the first deep learning
+            approaches for single-cell RNA sequencing. I also teach a graduate-level deep learning
+            course at the University of St. Thomas.
+          </p>
+        </div>
+      </div>
+      <div class="about-facts reveal">
+        <div class="fact-item">
+          <div class="fact-label">position</div>
+          <div class="fact-value">Assistant Professor & Group Leader</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-label">institution</div>
+          <div class="fact-value">Baylor College of Medicine, Houston TX</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-label">ph.d.</div>
+          <div class="fact-value">Bioinformatics, Baylor College of Medicine</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-label">publications</div>
+          <div class="fact-value">40+ papers &nbsp;·&nbsp; h-index 27</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-label">email</div>
+          <div class="fact-value"><a href="mailto:lkmklsmn@gmail.com" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.3)">lkmklsmn@gmail.com</a></div>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="section-marker">about</div>
-      <div class="about-text fade-in">
-        <p>
-          I'm an Assistant Professor and Group Leader of Computational Biology at the
-          <a href="https://www.bcm.edu" target="_blank">Therapeutic Innovation Center, Baylor College of Medicine</a>.
-          My work sits at the intersection of data science and cancer medicine—using AI and genomics to identify
-          drug targets, understand disease mechanisms, and accelerate the path from discovery to therapy.
-        </p>
-        <p>
-          Before Baylor, I trained as a postdoctoral fellow with Fabian Theis at the Helmholtz Research Center
-          in Munich, where I helped develop some of the first deep learning approaches for single-cell RNA sequencing.
-          That work seeded a broader interest in building computational tools that the biology community can actually use.
-        </p>
-        <p>
-          I hold a Ph.D. in Bioinformatics from Baylor College of Medicine. I also teach a graduate-level
-          deep learning course at the University of St. Thomas.
-        </p>
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="eyebrow">research</div>
+      <h2 class="section-heading">What I work on</h2>
+    </div>
+    <div class="research-grid">
+      <div class="r-card reveal">
+        <div class="r-num">01</div>
+        <div class="r-title">RNA Splicing &amp; Cancer Therapeutics</div>
+        <div class="r-desc">Uncovering how MYC-driven tumors are selectively vulnerable to spliceosome-targeted therapies. This work contributed to a clinical-stage drug discovery program and a biotech spinoff.</div>
+        <div class="r-bar"></div>
+      </div>
+      <div class="r-card reveal">
+        <div class="r-num">02</div>
+        <div class="r-title">Deep Learning for Single-Cell Genomics</div>
+        <div class="r-desc">Designing novel architectures—denoising autoencoders, triplet neural networks—to extract biological signal from the high-dimensional noise of single-cell sequencing data.</div>
+        <div class="r-bar"></div>
+      </div>
+      <div class="r-card reveal">
+        <div class="r-num">03</div>
+        <div class="r-title">Biomarker Discovery in Oncology</div>
+        <div class="r-desc">Integrating patient genomic and functional screening data to find molecular markers that predict cancer cell vulnerabilities and guide drug development decisions.</div>
+        <div class="r-bar"></div>
+      </div>
+      <div class="r-card reveal">
+        <div class="r-num">04</div>
+        <div class="r-title">Translational Multi-omic Analysis</div>
+        <div class="r-desc">Collaborating with wet-lab and clinical teams to translate large-scale molecular data—from lung cell atlases to platelet biology—into biological insight and therapeutic hypotheses.</div>
+        <div class="r-bar"></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- RESEARCH -->
-  <section id="work">
-    <div class="container">
-      <div class="section-marker">research</div>
-      <div class="work-grid">
-        <div class="work-item fade-in">
-          <div class="work-num">01</div>
-          <div class="work-title">RNA Splicing & Cancer Therapeutics</div>
-          <div class="work-desc">
-            Investigating how tumors driven by the MYC oncogene become selectively vulnerable to spliceosome-targeted therapies—work that contributed to a clinical-stage drug discovery program and a biotech spinoff.
-          </div>
+<div class="divider"></div>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="section-wrap">
+    <div class="pub-heading-row reveal">
+      <div>
+        <div class="eyebrow">selected publications</div>
+        <h2 class="section-heading">Key papers</h2>
+      </div>
+      <a class="pub-see-all" href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank">
+        Full list on Scholar <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <ul class="pub-list reveal">
+      <li class="pub-row">
+        <div class="pub-venue">npj Precis.<br>Oncology</div>
+        <div>
+          <div class="pub-title">Bio-primed machine learning to enhance discovery of relevant biomarkers</div>
+          <div class="pub-authors">Henke DM, …, <strong>Simon LM</strong><sup>†</sup></div>
         </div>
-        <div class="work-item fade-in">
-          <div class="work-num">02</div>
-          <div class="work-title">Machine Learning for Single-Cell Genomics</div>
-          <div class="work-desc">
-            Designing deep learning methods—from denoising autoencoders to triplet neural networks—to make sense of the high-dimensional, noisy data that single-cell sequencing produces.
-          </div>
+        <div class="pub-year">2025</div>
+      </li>
+      <li class="pub-row">
+        <div class="pub-venue">Cancer<br>Discovery</div>
+        <div>
+          <div class="pub-title">MYC Induces Oncogenic Stress through RNA Decay and Ribonucleotide Catabolism in Breast Cancer</div>
+          <div class="pub-authors">Meena JK, …, <strong>Simon LM</strong>, … Westbrook TF</div>
         </div>
-        <div class="work-item fade-in">
-          <div class="work-num">03</div>
-          <div class="work-title">Biomarker Discovery in Oncology</div>
-          <div class="work-desc">
-            Integrating patient genomic, transcriptomic, and functional screening data to find molecular markers that predict cancer cell vulnerabilities and guide drug development decisions.
-          </div>
+        <div class="pub-year">2024</div>
+      </li>
+      <li class="pub-row">
+        <div class="pub-venue">Nature Mach.<br>Intelligence</div>
+        <div>
+          <div class="pub-title">Integrating millions of single cells using batch-aware triplet neural networks</div>
+          <div class="pub-authors"><strong>Simon LM</strong><sup>*†</sup>, Wang Y<sup>*</sup>, Zhao Z<sup>†</sup></div>
         </div>
-        <div class="work-item fade-in">
-          <div class="work-num">04</div>
-          <div class="work-title">Translational Multi-omic Analysis</div>
-          <div class="work-desc">
-            Collaborating with wet-lab and clinical teams to translate large-scale molecular data—from lung cell atlases to platelet biology—into biological insight and therapeutic hypotheses.
-          </div>
+        <div class="pub-year">2021</div>
+      </li>
+      <li class="pub-row">
+        <div class="pub-venue">Cell</div>
+        <div>
+          <div class="pub-title">Spliceosome-targeted therapies trigger an antiviral immune response in triple-negative breast cancer</div>
+          <div class="pub-authors">Bowling EA, …, <strong>Simon LM</strong>, … Westbrook TF</div>
         </div>
+        <div class="pub-year">2021</div>
+      </li>
+      <li class="pub-row">
+        <div class="pub-venue">Nature<br>Commun.</div>
+        <div>
+          <div class="pub-title">Single cell RNA-seq denoising using a deep count autoencoder</div>
+          <div class="pub-authors">Eraslan G<sup>*</sup>, <strong>Simon LM</strong><sup>*</sup>, Mircea M, Mueller NS, Theis FJ</div>
+        </div>
+        <div class="pub-year">2019</div>
+      </li>
+      <li class="pub-row">
+        <div class="pub-venue">Nature</div>
+        <div>
+          <div class="pub-title">The spliceosome is a therapeutic vulnerability in MYC-driven cancer</div>
+          <div class="pub-authors">Hsu TY, <strong>Simon LM</strong>, … Westbrook TF</div>
+        </div>
+        <div class="pub-year">2015</div>
+      </li>
+    </ul>
+
+    <p class="pub-footnote reveal">
+      <sup>*</sup> equal contribution &nbsp;·&nbsp; <sup>†</sup> corresponding author
+      &nbsp;·&nbsp; also on <a href="https://www.ncbi.nlm.nih.gov/myncbi/1fCTiG6Pkw9Aq/bibliography/public/" target="_blank" style="color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.3)">PubMed</a>
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="contact-inner reveal">
+      <div class="eyebrow">contact</div>
+      <h2 class="contact-headline">Let's talk<br><em>science.</em></h2>
+      <p class="contact-sub">Open to collaborations, speaking invitations, and conversations about computational biology and drug discovery.</p>
+      <div class="contact-tiles">
+        <a class="c-tile" href="mailto:lkmklsmn@gmail.com">
+          <div class="c-label">email</div>
+          <div class="c-val">lkmklsmn@gmail.com</div>
+          <div class="c-tile-arrow">↗</div>
+        </a>
+        <a class="c-tile" href="https://github.com/lkmklsmn" target="_blank">
+          <div class="c-label">github</div>
+          <div class="c-val">lkmklsmn</div>
+          <div class="c-tile-arrow">↗</div>
+        </a>
+        <a class="c-tile" href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank">
+          <div class="c-label">scholar</div>
+          <div class="c-val">Google Scholar</div>
+          <div class="c-tile-arrow">↗</div>
+        </a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PUBLICATIONS -->
-  <section id="publications">
-    <div class="container">
-      <div class="section-marker">selected publications</div>
-      <ul class="pub-list fade-in">
+<footer>
+  <div class="footer-inner">
+    <span>Lukas M. Simon, Ph.D.</span>
+    <span>Baylor College of Medicine · Houston, TX</span>
+  </div>
+</footer>
 
-        <li class="pub-item">
-          <div class="pub-journal">npj Precis.<br>Oncology</div>
-          <div class="pub-body">
-            <div class="pub-title">Bio-primed machine learning to enhance discovery of relevant biomarkers</div>
-            <div class="pub-meta">Henke DM, …, <strong>Simon LM</strong><sup>†</sup></div>
-            <div class="pub-year">2025</div>
-          </div>
-        </li>
+<script>
+/* ── HERO CANVAS: animated nodes & edges ──────────────────── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [], animId;
 
-        <li class="pub-item">
-          <div class="pub-journal">Cancer<br>Discovery</div>
-          <div class="pub-body">
-            <div class="pub-title">MYC Induces Oncogenic Stress through RNA Decay and Ribonucleotide Catabolism in Breast Cancer</div>
-            <div class="pub-meta">Meena JK, …, <strong>Simon LM</strong>, … Westbrook TF.</div>
-            <div class="pub-year">2024</div>
-          </div>
-        </li>
+  const GOLD  = 'rgba(201,168,76,';
+  const SKY   = 'rgba(111,163,196,';
+  const COUNT = 55;
 
-        <li class="pub-item">
-          <div class="pub-journal">Nature Mach.<br>Intelligence</div>
-          <div class="pub-body">
-            <div class="pub-title">Integrating millions of single cells using batch-aware triplet neural networks</div>
-            <div class="pub-meta"><strong>Simon LM</strong><sup>*†</sup>, Wang Y<sup>*</sup>, Zhao Z<sup>†</sup></div>
-            <div class="pub-year">2021</div>
-          </div>
-        </li>
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
 
-        <li class="pub-item">
-          <div class="pub-journal">Cell</div>
-          <div class="pub-body">
-            <div class="pub-title">Spliceosome-targeted therapies trigger an antiviral immune response in triple-negative breast cancer</div>
-            <div class="pub-meta">Bowling EA, …, <strong>Simon LM</strong>, … Westbrook TF.</div>
-            <div class="pub-year">2021</div>
-          </div>
-        </li>
-
-        <li class="pub-item">
-          <div class="pub-journal">Nature<br>Commun.</div>
-          <div class="pub-body">
-            <div class="pub-title">Single cell RNA-seq denoising using a deep count autoencoder</div>
-            <div class="pub-meta">Eraslan G<sup>*</sup>, <strong>Simon LM</strong><sup>*</sup>, Mircea M, Mueller NS, Theis FJ.</div>
-            <div class="pub-year">2019</div>
-          </div>
-        </li>
-
-        <li class="pub-item">
-          <div class="pub-journal">Nature</div>
-          <div class="pub-body">
-            <div class="pub-title">The spliceosome is a therapeutic vulnerability in MYC-driven cancer</div>
-            <div class="pub-meta">Hsu TY, <strong>Simon LM</strong>, … Westbrook TF.</div>
-            <div class="pub-year">2015</div>
-          </div>
-        </li>
-
-      </ul>
-
-      <p class="pub-note fade-in">
-        <sup>*</sup> equal contribution &nbsp;·&nbsp; <sup>†</sup> corresponding author<br><br>
-        Full list on <a href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank">Google Scholar</a>
-        or <a href="https://www.ncbi.nlm.nih.gov/myncbi/1fCTiG6Pkw9Aq/bibliography/public/" target="_blank">PubMed</a>.
-      </p>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="section-marker">contact</div>
-      <p class="contact-intro fade-in">
-        Open to collaborations, speaking invitations, and conversations about computational biology.
-      </p>
-      <div class="contact-grid fade-in">
-        <div>
-          <div class="contact-label">email</div>
-          <div class="contact-val"><a href="mailto:lkmklsmn@gmail.com">lkmklsmn@gmail.com</a></div>
-        </div>
-        <div>
-          <div class="contact-label">github</div>
-          <div class="contact-val"><a href="https://github.com/lkmklsmn" target="_blank">github.com/lkmklsmn</a></div>
-        </div>
-        <div>
-          <div class="contact-label">institution</div>
-          <div class="contact-val"><a href="https://www.bcm.edu" target="_blank">Baylor College of Medicine</a></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-inner">
-      <span>Lukas M. Simon, Ph.D.</span>
-      <span>Houston, TX</span>
-    </div>
-  </footer>
-
-  <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const siblings = Array.from(entry.target.parentElement.querySelectorAll('.fade-in'));
-          const idx = siblings.indexOf(entry.target);
-          setTimeout(() => entry.target.classList.add('visible'), idx * 90);
-        }
+  function initNodes() {
+    nodes = [];
+    for (let i = 0; i < COUNT; i++) {
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 2.2 + 0.8,
+        col: Math.random() > 0.6 ? GOLD : SKY,
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  </script>
+    }
+  }
 
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // edges
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 140) {
+          const alpha = (1 - dist / 140) * 0.18;
+          ctx.beginPath();
+          ctx.strokeStyle = GOLD + alpha + ')';
+          ctx.lineWidth = 0.6;
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // nodes
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.col + '0.7)';
+      ctx.fill();
+
+      // glow
+      const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
+      g.addColorStop(0, n.col + '0.12)');
+      g.addColorStop(1, n.col + '0)');
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
+      ctx.fillStyle = g;
+      ctx.fill();
+    });
+  }
+
+  function update() {
+    nodes.forEach(n => {
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
+    });
+  }
+
+  function loop() {
+    update();
+    draw();
+    animId = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => { resize(); initNodes(); });
+  resize();
+  initNodes();
+  loop();
+})();
+
+/* ── SCROLL REVEAL ──────────────────────────────────────────── */
+(function() {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const siblings = Array.from(entry.target.parentElement.querySelectorAll('.reveal'));
+      const idx = siblings.indexOf(entry.target);
+      setTimeout(() => entry.target.classList.add('up'), idx * 110);
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => io.observe(el));
+})();
+</script>
 </body>
 </html>

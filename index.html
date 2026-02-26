@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lukas M. Simon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --paper:   #fdfaf5;
+      --ink:     #1c1b17;
+      --ink-mid: #4a4840;
+      --ink-dim: #9a9690;
+      --green:   #2c4a2e;
+      --green-l: #4a7a4e;
+      --rule:    rgba(28,27,23,0.1);
+      --serif-display: 'Cormorant Garamond', Georgia, serif;
+      --serif-body:    'Newsreader', Georgia, serif;
+      --mono:          'IBM Plex Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif-body);
+      font-size: 18px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(253,250,245,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-name {
+      font-family: var(--serif-display);
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--ink-mid);
+      text-decoration: none;
+      text-transform: lowercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+
+    /* HERO */
+    #top {
+      padding: 10rem 0 6rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--green-l);
+      text-transform: lowercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: appear 1s 0.1s forwards;
+    }
+    h1.hero-name {
+      font-family: var(--serif-display);
+      font-size: clamp(3.5rem, 8vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: appear 1s 0.3s forwards;
+    }
+    h1.hero-name em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--green);
+    }
+    .hero-statement {
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--ink-mid);
+      max-width: 560px;
+      line-height: 1.8;
+      border-left: 2px solid var(--green);
+      padding-left: 1.5rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: appear 1s 0.5s forwards;
+    }
+    .hero-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: appear 1s 0.7s forwards;
+    }
+    .hero-link {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--ink-mid);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .hero-link:hover {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    section:last-of-type { border-bottom: none; }
+
+    .section-marker {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--ink-dim);
+      text-transform: lowercase;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-marker::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ABOUT */
+    .about-text p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--ink-mid);
+      margin-bottom: 1.2rem;
+      max-width: 680px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text a {
+      color: var(--green);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(44,74,46,0.3);
+      transition: border-color 0.2s;
+    }
+    .about-text a:hover { border-color: var(--green); }
+
+    /* RESEARCH */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 3rem;
+    }
+    .work-item {}
+    .work-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 300;
+      color: var(--ink-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .work-title {
+      font-family: var(--serif-display);
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+    .work-desc {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--ink-mid);
+      line-height: 1.7;
+    }
+
+    /* PUBLICATIONS */
+    .pub-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .pub-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 0 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .pub-item:first-child { border-top: 1px solid var(--rule); }
+    .pub-journal {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--green-l);
+      padding-top: 0.25rem;
+      line-height: 1.5;
+    }
+    .pub-title {
+      font-family: var(--serif-display);
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 0.3rem;
+    }
+    .pub-meta {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--ink-dim);
+      font-style: italic;
+    }
+    .pub-meta strong {
+      font-style: normal;
+      font-weight: 400;
+      color: var(--ink-mid);
+    }
+    .pub-year {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--ink-dim);
+      margin-top: 0.3rem;
+    }
+    .pub-note {
+      margin-top: 2rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 300;
+      color: var(--ink-dim);
+      letter-spacing: 0.04em;
+      line-height: 1.8;
+    }
+    .pub-note a {
+      color: var(--green);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(44,74,46,0.3);
+    }
+    .pub-note a:hover { border-color: var(--green); }
+
+    /* CONTACT */
+    #contact { border-bottom: none; }
+    .contact-intro {
+      font-family: var(--serif-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.3;
+      color: var(--ink);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+    }
+    .contact-grid {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--ink-dim);
+      text-transform: lowercase;
+      margin-bottom: 0.35rem;
+    }
+    .contact-val {
+      font-size: 0.95rem;
+      font-weight: 300;
+    }
+    .contact-val a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-val a:hover {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 0;
+      border-top: 1px solid var(--rule);
+    }
+    .footer-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 300;
+      color: var(--ink-dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* SCROLL REVEAL */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .work-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .pub-item { grid-template-columns: 1fr; gap: 0.3rem; }
+      .contact-grid { gap: 1.5rem; }
+      .footer-inner { flex-direction: column; gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#top" class="nav-name">Lukas M. Simon</a>
+      <ul class="nav-links">
+        <li><a href="#about">about</a></li>
+        <li><a href="#work">research</a></li>
+        <li><a href="#publications">papers</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div id="top">
+    <div class="container">
+      <div class="hero-eyebrow">computational biologist &nbsp;·&nbsp; houston, tx</div>
+      <h1 class="hero-name">Lukas M.<br><em>Simon</em></h1>
+      <p class="hero-statement">
+        I build machine learning methods and genomic analyses to understand cancer—and find ways to treat it.
+      </p>
+      <div class="hero-links">
+        <a href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank" class="hero-link">google scholar</a>
+        <a href="https://github.com/lkmklsmn" target="_blank" class="hero-link">github</a>
+        <a href="mailto:lkmklsmn@gmail.com" class="hero-link">email</a>
+        <a href="https://www.ncbi.nlm.nih.gov/myncbi/1fCTiG6Pkw9Aq/bibliography/public/" target="_blank" class="hero-link">pubmed</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="section-marker">about</div>
+      <div class="about-text fade-in">
+        <p>
+          I'm an Assistant Professor and Group Leader of Computational Biology at the
+          <a href="https://www.bcm.edu" target="_blank">Therapeutic Innovation Center, Baylor College of Medicine</a>.
+          My work sits at the intersection of data science and cancer medicine—using AI and genomics to identify
+          drug targets, understand disease mechanisms, and accelerate the path from discovery to therapy.
+        </p>
+        <p>
+          Before Baylor, I trained as a postdoctoral fellow with Fabian Theis at the Helmholtz Research Center
+          in Munich, where I helped develop some of the first deep learning approaches for single-cell RNA sequencing.
+          That work seeded a broader interest in building computational tools that the biology community can actually use.
+        </p>
+        <p>
+          I hold a Ph.D. in Bioinformatics from Baylor College of Medicine. I also teach a graduate-level
+          deep learning course at the University of St. Thomas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="work">
+    <div class="container">
+      <div class="section-marker">research</div>
+      <div class="work-grid">
+        <div class="work-item fade-in">
+          <div class="work-num">01</div>
+          <div class="work-title">RNA Splicing & Cancer Therapeutics</div>
+          <div class="work-desc">
+            Investigating how tumors driven by the MYC oncogene become selectively vulnerable to spliceosome-targeted therapies—work that contributed to a clinical-stage drug discovery program and a biotech spinoff.
+          </div>
+        </div>
+        <div class="work-item fade-in">
+          <div class="work-num">02</div>
+          <div class="work-title">Machine Learning for Single-Cell Genomics</div>
+          <div class="work-desc">
+            Designing deep learning methods—from denoising autoencoders to triplet neural networks—to make sense of the high-dimensional, noisy data that single-cell sequencing produces.
+          </div>
+        </div>
+        <div class="work-item fade-in">
+          <div class="work-num">03</div>
+          <div class="work-title">Biomarker Discovery in Oncology</div>
+          <div class="work-desc">
+            Integrating patient genomic, transcriptomic, and functional screening data to find molecular markers that predict cancer cell vulnerabilities and guide drug development decisions.
+          </div>
+        </div>
+        <div class="work-item fade-in">
+          <div class="work-num">04</div>
+          <div class="work-title">Translational Multi-omic Analysis</div>
+          <div class="work-desc">
+            Collaborating with wet-lab and clinical teams to translate large-scale molecular data—from lung cell atlases to platelet biology—into biological insight and therapeutic hypotheses.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="container">
+      <div class="section-marker">selected publications</div>
+      <ul class="pub-list fade-in">
+
+        <li class="pub-item">
+          <div class="pub-journal">npj Precis.<br>Oncology</div>
+          <div class="pub-body">
+            <div class="pub-title">Bio-primed machine learning to enhance discovery of relevant biomarkers</div>
+            <div class="pub-meta">Henke DM, …, <strong>Simon LM</strong><sup>†</sup></div>
+            <div class="pub-year">2025</div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-journal">Cancer<br>Discovery</div>
+          <div class="pub-body">
+            <div class="pub-title">MYC Induces Oncogenic Stress through RNA Decay and Ribonucleotide Catabolism in Breast Cancer</div>
+            <div class="pub-meta">Meena JK, …, <strong>Simon LM</strong>, … Westbrook TF.</div>
+            <div class="pub-year">2024</div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-journal">Nature Mach.<br>Intelligence</div>
+          <div class="pub-body">
+            <div class="pub-title">Integrating millions of single cells using batch-aware triplet neural networks</div>
+            <div class="pub-meta"><strong>Simon LM</strong><sup>*†</sup>, Wang Y<sup>*</sup>, Zhao Z<sup>†</sup></div>
+            <div class="pub-year">2021</div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-journal">Cell</div>
+          <div class="pub-body">
+            <div class="pub-title">Spliceosome-targeted therapies trigger an antiviral immune response in triple-negative breast cancer</div>
+            <div class="pub-meta">Bowling EA, …, <strong>Simon LM</strong>, … Westbrook TF.</div>
+            <div class="pub-year">2021</div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-journal">Nature<br>Commun.</div>
+          <div class="pub-body">
+            <div class="pub-title">Single cell RNA-seq denoising using a deep count autoencoder</div>
+            <div class="pub-meta">Eraslan G<sup>*</sup>, <strong>Simon LM</strong><sup>*</sup>, Mircea M, Mueller NS, Theis FJ.</div>
+            <div class="pub-year">2019</div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-journal">Nature</div>
+          <div class="pub-body">
+            <div class="pub-title">The spliceosome is a therapeutic vulnerability in MYC-driven cancer</div>
+            <div class="pub-meta">Hsu TY, <strong>Simon LM</strong>, … Westbrook TF.</div>
+            <div class="pub-year">2015</div>
+          </div>
+        </li>
+
+      </ul>
+
+      <p class="pub-note fade-in">
+        <sup>*</sup> equal contribution &nbsp;·&nbsp; <sup>†</sup> corresponding author<br><br>
+        Full list on <a href="https://scholar.google.com/citations?user=yZ2MXf0AAAAJ&hl=en" target="_blank">Google Scholar</a>
+        or <a href="https://www.ncbi.nlm.nih.gov/myncbi/1fCTiG6Pkw9Aq/bibliography/public/" target="_blank">PubMed</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-marker">contact</div>
+      <p class="contact-intro fade-in">
+        Open to collaborations, speaking invitations, and conversations about computational biology.
+      </p>
+      <div class="contact-grid fade-in">
+        <div>
+          <div class="contact-label">email</div>
+          <div class="contact-val"><a href="mailto:lkmklsmn@gmail.com">lkmklsmn@gmail.com</a></div>
+        </div>
+        <div>
+          <div class="contact-label">github</div>
+          <div class="contact-val"><a href="https://github.com/lkmklsmn" target="_blank">github.com/lkmklsmn</a></div>
+        </div>
+        <div>
+          <div class="contact-label">institution</div>
+          <div class="contact-val"><a href="https://www.bcm.edu" target="_blank">Baylor College of Medicine</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Lukas M. Simon, Ph.D.</span>
+      <span>Houston, TX</span>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const siblings = Array.from(entry.target.parentElement.querySelectorAll('.fade-in'));
+          const idx = siblings.indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), idx * 90);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
